@@ -66,7 +66,7 @@ def signup_by_email(args):
     verification.send_verification_email(user.email)
     access_token = jwttoken.encode(user)
     data = {
-        'message': 'Your account is created',
+        'message': 'Your account has been created. Check your email and complete sign-up process',
         'access_token': access_token
     }
     return data
@@ -84,7 +84,7 @@ def verify_email(args, user):
     if verification.verify_email(user.email, code):
         user.email_verified = True
         db.session.commit()
-        return {'message': 'Your email has been verified successfully'}
+        return {'message': 'Congratulations! Your account has been activated'}
 
     return {'message': 'Something wrong happened when verifying your email'}, 400
 
@@ -93,4 +93,4 @@ def verify_email(args, user):
 @access_token_required
 def resend_verification_email(user):
     verification.send_verification_email(user.email)
-    return {'message': 'New email has been sent'}
+    return {'message': 'New email has been sent to your mailbox'}
