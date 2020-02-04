@@ -1,0 +1,5 @@
+twilio==6.35.3
+Flask==1.1.1
+Flask-SQLAlchemy==2.4.1
+PyMySQL==0.9.3
+PyJWT==1.7.1
