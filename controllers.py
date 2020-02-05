@@ -51,14 +51,18 @@ def access_token_required(f):
 @app.route('/signup/email', methods=['POST'])
 @parse_args
 def signup_by_email(args):
-    email = args['email']
+    email = args.get('email')
+    password = args.get('password')
+    if not (email and password):
+        return {'message': 'Email and password are required'}
+
     user = User.query.filter_by(email=email).first()
     if user is not None:
         return {'message': 'User already exists'}, 400
 
     user = User(
         email=email,
-        password=args['password'],
+        password=password,
         email_verified=False
     )
     db.session.add(user)
