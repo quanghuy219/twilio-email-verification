@@ -72,6 +72,28 @@ def signup_by_email(args):
     return data
 
 
+@app.route('/login/email', methods=['POST'])
+@parse_args
+def login_by_email(args):
+    email = args.get('email')
+    password = args.get('password')
+    if not (email and password):
+        return {'message': 'Email and password are required'}
+
+    user = User.query.filter_by(email=email).first()
+    if not user or user.password != password:
+        return {'message': 'Email or password is incorrect'}, 400
+
+    access_token = jwttoken.encode(user)
+    data = {
+        'access_token': access_token,
+        'id': user.id,
+        'email': user.email,
+        'email_verified': user.email_verified
+    }
+    return data
+
+
 @app.route('/verify/email', methods=['POST'])
 @parse_args
 @access_token_required
